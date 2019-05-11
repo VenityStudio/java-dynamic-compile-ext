@@ -1,0 +1,17 @@
+name: java-dynamic-compile-ext
+version: 1.0.0
+deps:
+  jphp-core: '*'
+  jphp-zend-ext: '*'
+  java-reflection-ext: '1.1.1'
+plugins:
+- App
+- Gradle
+sources:
+- src
+includes:
+- index.php
+
+gradle:
+  deps:
+    - "net.openhft:compiler:2.3.4"

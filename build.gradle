@@ -1,0 +1,53 @@
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "eclipse"
+
+version '1.0.0'
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+sourceSets {
+    main.java.srcDirs = ['src-jvm/main/java']
+    main.resources.srcDirs = ['src-jvm/main/resources']
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  jcenter()
+  maven { url 'https://oss.sonatype.org/content/groups/public' }
+}
+
+configurations { provided }
+
+sourceSets { main { compileClasspath += configurations.provided } }
+
+dependencies {
+  provided files('jars/x-annotations-12.0.jar')
+  provided files('jars/x-compiler-2.3.4.jar')
+  provided files('jars/x-java-dynamic-compile-ext-1.0.0.jar')
+  provided files('jars/x-slf4j-api-1.7.25.jar')
+  provided files('vendor/jphp-core/jars/asm-all-5.2.jar',
+ 'vendor/jphp-core/jars/jphp-core-0.9.3-SNAPSHOT.jar',
+ 'vendor/jphp-runtime/jars/jphp-runtime-1.0.3.jar',
+ 'vendor/jphp-zend-ext/jars/gson-2.7.jar',
+ 'vendor/jphp-zend-ext/jars/jphp-zend-ext-0.9.3-SNAPSHOT.jar',
+ 'vendor/jphp-json-ext/jars/gson-2.7.jar',
+ 'vendor/jphp-json-ext/jars/jphp-json-ext-0.9.3-SNAPSHOT.jar',
+ 'vendor/java-reflection-ext/jars/x-java-reflection-ext-1.1.1.jar')
+  compile 'net.openhft:compiler:2.3.4'
+}
+
+jar {
+   destinationDir = file('jars/')
+   baseName = 'x-java-dynamic-compile-ext'
+}
+
+task copyJars(type: Copy) {
+  from project.configurations.compile
+  into file(projectDir.path + '/jars/')
+  rename { name -> 'x-' + name }
+}
